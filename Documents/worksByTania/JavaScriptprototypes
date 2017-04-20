@@ -1,0 +1,137 @@
+//two ways to add properties in a class
+// 1. in a constructor
+//2. in a prototype
+var Student = function(name) {
+  this.obj.name = name;
+  this.number = 22;
+}
+
+Student.prototype.obj = {
+  name: 'default'
+};
+
+var tania = new Student("tania");
+var kevin = new Student("Kevin");
+tania.number = 23;
+//here the instance share the same prototype members
+console.log(kevin.obj.name); //logs kevin
+console.log(tania.obj.name); //logs kevin
+console.log(kevin.number); //logs 22
+console.log(kevin.obj.name); //logs 23
+
+//----------------------------------------
+
+var Car = {
+  name: "default",
+  sayName: function() {
+    console.log("this is a" + this.name + "car");
+  },
+  passenger: []
+}
+
+var mazda = Object.create(Car);
+mazda.name = "mazda";
+
+var nissan = Object.create(Car);
+nissan.name = "Nissan";
+
+//here the instance share the same prototype members
+
+nissan.passenger.push();
+//both has same passenger list
+console.log(mazda.passenger);
+console.log(nissan.passenger);
+
+//-------------------------------------
+
+var Car = {
+  sayName: function() {
+    console.log('this is a' + this.name);
+  },
+  //to have instance specific members, need to run this constructor
+  constructor: function(name) {
+    this.name = name || 'default';
+    this.passenger = [];
+    return this;
+  }
+}
+
+//here since specific instance holds val bcz of this...we get different passenger list
+var mazda = Object.create(Car).constructor('mazda');
+mazda.passenger.push('Kevin');
+console.log(mazda.name);
+console.log(mazda.passenger);
+
+var nissan = Object.create(Car).constructor('Nissan');
+console.log(nissan.name);
+console.log(nissan.passenger);
+
+//----------using classical inheritance----------------------------
+
+function Person() {
+  this.food = [];
+  this.num = 22;
+}
+
+function Girl() {
+  //below statemet executes every statement in the Person with 'this' to be created mazda
+  Person.apply(this, arguments);
+}
+
+//setting the Girl prototype
+
+Girl.prototype = Object.create(Person.prototype);
+//Girl.prototype = new Person(); -- can do but not a good approach
+//here constructor is the built in memeber so pointing constructor of Girl to the //right one
+Girl.prototype.constructor = Girl;
+
+var mikayla = new Girl();
+//this.food (inst spec to mikayla) comes from Person code with Person.apply(this.argumentd)
+mikayla.food.push('avacado');
+
+var tani = new Girl();
+//whatever behaviour we add to prottype will reflect in inherited members
+Person.prototype.run = function() {
+  console.log("running")
+};
+mikayla.run();
+
+
+console.log("mikayla's food " + mikayla.food);
+console.log(mikayla.num);
+console.log("tanis food " + tani.food.length);
+
+
+//---------------classical inheritance -----------------
+
+function Automobile(name, miles) {
+  this.name = name || "default";
+  this.miles = miles || 0;
+}
+
+Automobile.prototype.run = function(name) {
+  console.log(this.name + " can run");
+  console.log(this.name + " ran " + this.miles + " miles");
+};
+
+var auto = new Automobile("automobile");
+console.log(auto.run());
+
+//now create subclass
+function Bus(name, miles) {
+  Automobile.call(this, name, miles); //call super constructor
+}
+
+//subclass extends superclass
+
+Bus.prototype = Object.create(Automobile.prototype);
+Bus.prototype.constructor = Bus;
+
+var greenbus = new Bus("greenbus", 2000);
+console.log(greenbus.run());
+
+console.log(greenbus instanceof Bus);
+console.log(greenbus instanceof Automobile);
+
+
+//--------------------------------------------------------------------------
