@@ -135,3 +135,45 @@ console.log(greenbus instanceof Automobile);
 
 
 //--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+var A = function(){
+this.x = function(){
+console.log('a');
+ };
+};
+
+A.prototype.updateX = function(value){
+this.x = function(){
+console.log(value);
+};
+};
+
+var a1 = new A();
+var a2 = new A();
+a1.x();
+a2.x();
+a1.updateX('u'); // updates only a1's instance
+a1.x(); // alerts u 
+a2.x(); // stil shows a 
+
+//now
+var B = function(){
+};
+
+B.prototype.x = function(){
+console.log('b');
+};
+
+B.prototype.updateX = function(value){
+B.prototype.x = function(){
+console.log(value);
+};
+};
+
+var b1 = new B();
+var b2 = new B();
+b1.x();
+b2.x();
+b1.updateX('z'); //updates both b1 and b2 since its held by prototype which is shared
+b1.x();
+b2.x();
