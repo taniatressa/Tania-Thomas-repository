@@ -177,3 +177,59 @@ b2.x();
 b1.updateX('z'); //updates both b1 and b2 since its held by prototype which is shared
 b1.x();
 b2.x();
+
+//---------------------------------------------------------
+//dynamically add properties
+
+var o = {
+propertyA : 'a',
+propertyB : 'b'
+};
+o['propertyC'] = 'c';
+console.log(o.propertyC); 
+
+Object.defineProperty(o,'propertyD', {
+																					value : 23,
+                                          enumerable : true,
+                                          writable : true,
+                                          configurable : true
+																				}
+);
+console.log(o.propertyD);
+o.propertyD += 24;
+console.log(o.propertyD);
+var bval;
+Object.defineProperty(o,"b",{get : function(){return bval;},
+														 set : function(newVal){bval = newVal;},
+                             enumerable : true,
+                             configurable: true
+                             });
+o.b = 45;
+//------------------------------------------------------------------------------
+
+//to encapsulate the complexity of defineProperty, we can define a function
+
+var defineProp = function(obj, key, value){
+		var config = {
+    		value : value,
+        writable : true,
+        configurable: true,
+        enumerable : true
+    };
+    Object.defineProperty(obj, key, config);
+};
+var data = {};
+defineProp(data, "property1", 33);
+defineProp(data, "property2", 34);
+console.log(data);
+
+//------------------------------------------------------------------------------
+//using es6 to dynamically add property
+
+var person = "tania tressa";
+var personId = "person_" + new Date().getTime();
+var  personIndex = {
+	[ personId ] : person
+}
+
+console.log(personIndex[personId]);
