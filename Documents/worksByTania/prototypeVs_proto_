@@ -1,0 +1,40 @@
+/* Object(o1) --> 	Object.protytype -> constructor / Op1
+			|							|
+     _proto_   		_proto_
+       |          	 |
+Function.prototype (F1) 
+                    Function --> Function.prototypr -> constructor / Fp1
+                                    |
+                                 _proto_
+                                   |
+                                 Cat(c1) --> Cat.prototype -> constructor / cp1
+                                            |		
+                                          _proto_
+                                            |
+                                           mycat -->
+ o --> _proto_ --> Oject.prototype
+ */
+
+/*
+	__proto__ is the actual object that is used in the lookup chain to resolve methods, etc.  prototype is the object that is used to build __proto__ when you create an object with new:
+*/
+Object.o1 = "";
+Object.prototype.Op1 = "";
+
+Function.F1 = "";
+Function.prototype.Fp1 = "";
+
+Cat = function() {
+
+};
+Cat.c1 = "";
+Cat.prototype.Cp1 = "";
+
+myCat = new Cat();
+o = {};
+
+console.log(myCat); // _proto_ refers to Cat.prototype
+console.log(o); // _proto_ refers to Object.prototype
+
+console.dir(myCat);
+console.dir(o);
