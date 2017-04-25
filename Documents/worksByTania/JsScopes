@@ -1,0 +1,84 @@
+//----------global-------------------------
+var a = 1;
+
+function A(){
+console.log(a);
+}
+A();
+//------------Local---------------------------
+var b = 1;
+
+function B(b){
+console.log(b)
+}
+
+function B1(){
+var b = 2;
+console.log(b);
+}
+
+B(3);
+B1();
+
+//-----------using let keyword which suport block scoping----------
+
+var c = 1;
+
+function C(){
+if(true){
+	let c = 4; // var c = 4 alerts 4 not 1
+}
+console.log(c);
+}
+C();
+
+//----------using object properties-----------------------------
+var d = 2;
+
+function D(){
+this.d = 34;
+}
+
+console.log(new D().d)
+
+//---------using closure--------------------------------
+var e = 3;
+
+var e1 = (function(){
+		var e =9;
+    return function(){
+     console.log(e);
+    }
+})()();
+
+//------------prototype based scope ----------------
+
+var f = 3;
+function F(){
+this.f = 34;
+}
+
+F.prototype.f = 9;
+F.prototype.g = 3;
+
+console.log(new F().f);
+console.log(new F().g);
+//------------global/local ---------------------------
+
+var h = 6;
+
+(function(){
+console.log(x); //undefined due to hoisting
+var x = 6;
+console.log(x); // 6
+
+})();
+//-------------try/catch-------------
+var i = 9;
+console.log(i);
+try{
+	throw 8;
+}catch(i){
+		console.log(i);
+}
+console.log(i);
