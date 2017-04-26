@@ -1,0 +1,102 @@
+//4 scenarios of how this is used and works
+
+/*1. calling an object
+	 'this' serves the purpose, providing our objects 
+   the ability to examine themselves, and point at their own   
+   properties.
+*/
+
+var deep_thought = {
+  the_answer: 34,
+  ask_question: function() {
+    return this.the_answer;
+  }
+};
+
+var the_meaning = deep_thought.ask_question();
+console.log(the_meaning);
+console.log(deep_thought.the_answer);
+
+//------------------------------------------------
+
+/*
+	2.constructor
+  when defining a function to be used as a constructor with
+  the new keyword, 'this' can be used to refer to the
+  object being created.
+  here instead of explicitly creating deep_thought, we write a func bigComputer and then instantiate deep_thought using new keyword
+  when new keyword called and completely nw object is created,tis keyword reference the new object
+*/
+
+function BigComputer(answer) {
+  this.the_answer = answer;
+  this.ask_question = function() {
+    return this.the_answer;
+  }
+}
+
+var deep_thought = new BigComputer(23);
+var the_meaning = deep_thought.ask_question();
+console.log(the_meaning);
+console.log(deep_thought.the_answer);
+
+//----------------------------------------------------------------------
+/*
+	3. Function call
+*/
+
+function test_this() {
+  return this;
+}
+//here this refers to the most global object for web pages always is window object
+console.log(test_this());
+
+
+//------------------------------------------------------------------
+
+/*
+	4. Event Handler
+  
+*/
+
+var first = {
+  num: 30
+}
+
+var second = {
+  num: 10
+}
+
+function multiply(mult) {
+  return this.num * mult;
+}
+
+console.log(multiply(2)); //gives undefined bcz since its 'this' is referering to the global object not 
+//so we should use either call, apple or bind
+
+console.log(multiply.call(first, 2));
+console.log(multiply.call(second, 3));
+
+console.log(multiply.apply(first, [2]));
+console.log(multiply.apply(second, [4]));
+
+var usingBind = multiply.bind(first); // bind returns a funct
+console.log("binding " + usingBing(2));
+
+//----------------------------------------------------------------------
+
+function BigComputer() {
+  this.the_answer = 12;
+  this.ask_question = function() {
+    console.log(this.the_answer);
+  }
+}
+
+function addHandler() {
+  var deep_thought = new BigComputer();
+  var the_button = document.getElementById('thebutton');
+  //if we dont use call here it considers this as window object and hence give undefined
+  the_button.onclick = deep_thought.ask_question.call(deep_thought);
+}
+
+addHandler();
