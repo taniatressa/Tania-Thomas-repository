@@ -1,0 +1,42 @@
+//-----------------------classical inheritance---------------
+(function() {
+  function Course(name, total, grade) {
+    this.name = name;
+    this.total = total;
+    this.grade = grade;
+  }
+
+  var course1 = new Course("CS", 300, "A");
+
+  console.log(course1.name);
+})();
+//---------------------------------prototypal inheritance------------------------
+(function() {
+
+  var Course = function(name, total, grade) {
+    // private
+    var private = {
+      name: name,
+      grade: grade,
+      total: total
+    };
+
+    //expose API
+    return {
+      get: function(prop) {
+        if (private.hasOwnProperty(prop)) {
+          return private[prop];
+        }
+      },
+      set: function(prop, value) {
+        if (private.hasOwnProperty(prop)) {
+          private[prop] = value;
+          return private[prop];
+        }
+      }
+    }
+  };
+  var course1 = new Course('maths', 320, 'A');
+  console.log(course1.get('name'));
+  console.log(course1.set('grade', 'A+'));
+})();
