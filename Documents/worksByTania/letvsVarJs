@@ -1,0 +1,55 @@
+// diff btw let and var
+
+// global 
+
+let me = "me";
+var i = "i";
+
+console.log(me + i);
+
+console.log(window.me); //gives undefined let not added as property
+console.log(window.i); // var is added as property
+
+//------------------------function--------------------------------------
+// in function they are identical
+function myfun() {
+  let name = "name";
+  var come = "come";
+}
+
+//----------------------block--------------------------------
+
+function func() {
+  for (let a = 1; a < 10; a++) {
+    //a is only visible here
+  }
+  //a not available
+
+}
+
+function func1() {
+  for (var b = 1; b < 1; b++) {
+    //b is visible
+  }
+  //b is visible
+}
+
+//---------------redeclaration------------------------------------------
+
+'use strict'
+let c = 1;
+let c = 3; // syntax error c already defined
+
+var d = 3;
+var d = 6; //no problem
+
+//--------------closure------------------------------------
+
+// let can be used to avoid problem with closure which happens with var
+//instead of using annonymous funct we can use let
+
+for (let i = 2; i < 7; i++) {
+  document.getElementById('my-ele' + i).addEventListener('click', function() {
+    console.log(i);
+  });
+}
