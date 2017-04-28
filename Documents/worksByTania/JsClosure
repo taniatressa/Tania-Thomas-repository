@@ -1,0 +1,234 @@
+/*
+a closure is a stack frame which is allocated when a function starts its execution, and not freed after the function returns 
+in Js function reference var point to function as well as a hidden pointer to closure
+*/
+
+//1.returning reference to func
+//here the local var is accesible even after the func is return thru closure
+// accessing variables outside of your immediate lexical scope creates a closure.
+(function() {
+  function func(name) {
+    var text = 'learning closures by ' + name;
+    var des = function() {
+      console.log(text);
+    }
+
+    return des;
+  }
+
+  var func1 = func('tania');
+  func1();
+})();
+// 2. local variables are not copied insteAD they are kept by Reference
+//keeps the stack frame in memory even outside
+(function() {
+  function func() {
+    var num = 45;
+    var update = function() {
+      console.log(num)
+    };
+    num++;
+    return update;
+  }
+  var func1 = func();
+  func1();
+})();
+//----------------------------------------------------------------------
+//all 3 gloal func have commo reference to closure  bz they all declared within a single call setupGlobals
+//when we ccreate a func inside another func the inside func is recreated each time the outside func is called
+var gLogNumber, gIncreaseNumber, gSetNumber;
+
+function setupSomeGlobals() {
+  var num = 78;
+  gLogNumber = function() {
+    console.log(num);
+  }
+  gIncreaseNumber = function() {
+    num++;
+  }
+  gSetNumber = function(val) {
+    num = val;
+  }
+
+}
+setupSomeGlobals();
+gIncreaseNumber();
+gLogNumber();
+gSetNumber(3);
+gLogNumber();
+// now again we call the function globals will be set again to original
+setupSomeGlobals(); // new closure stack will be created
+gLogNumber();
+gIncreaseNumber();
+gLogNumber();
+
+//-----------below eg is a prob caused by closure---------------------
+//function inside a loop local var from closure dont behave properly
+
+function buildList(list) {
+  //here there is only one closure for the local variables in the buildList
+  //so alwys the value in result will be item2 
+  var result = [];
+  for (var i = 0; i < list.length; i++) {
+    var item = 'item' + i;
+    console.log(list[2]);
+    result.push(function() {
+      console.log(item + ' ' + list[i])
+    })
+  }
+  return result;
+}
+
+function testList() {
+  var fnLists = buildList([1, 2, 3]);
+  for (var j = 0; j < fnLists.length; j++) {
+    fnLists[j](); //here the result  is item2 undefined
+  }
+
+}
+
+testList();
+//------------------------------------------------------------
+
+function sayTani() {
+  var say = function() {
+    //tani will be in the closure though its defined after the fun
+    console.log(tani);
+  }
+  var tani = "tani";
+  return say
+}
+
+var say1 = sayTani();
+say1();
+
+//------------------------------------------------------------
+//each call creates a seperate closure for local var
+function newClosure(someNum, someRef) {
+  //local var that end up within closure
+  var num = someNum;
+  var ref = someRef;
+  var anArray = [1, 2, 3];
+
+  return function(x) {
+    num += x;
+    anArray.push(num);
+    console.log('num: ' + num + ';anArray: ' + anArray.toString() +
+      '; ref.someVar' + ref.someVar);
+  }
+}
+
+var obj = {
+  someVar: 3
+};
+fn1 = newClosure(5, obj);
+fn2 = newClosure(6, obj);
+fn1(1);
+fn2(1);
+obj.someVar++;
+fn1(1);
+fn2(1);
+
+//-------------------------------------------------------------
+
+// accessing variables outside of your immediate lexical scope creates a closure.
+(function() {
+  function foo(x) {
+    var temp = 3;
+
+    function bar(y) {
+      console.log(x);
+      console.log(y);
+      console.log(temp);
+      console.log(x + y + (++temp));
+    }
+    bar(10);
+  }
+  foo(2);
+})();
+// OR
+
+(function() {
+  function foo(x) {
+    var temp = 3;
+    return function(y) {
+      console.log(x + y + (++temp));
+    }
+  }
+  var bar = foo(2);
+  bar(10);
+}());
+//---------------------------------------------------------------
+//JavaScript always uses references when dealing with objects
+//when we call foo with an object, closure it returns reference that object
+(function() {
+  function foo(x) {
+    var temp = 3;
+    return function(y) {
+      console.log(x + y + temp);
+      console.log('x.memb' + x.memb);
+      x.memb = x.memb ? x.memb + 1 : 1;
+      console.log('x.memb' + x.memb);
+    }
+  }
+  var age = new Number(2);
+  var bar = foo(age); // bar is now a closure referencing age
+  //each call to bar(10) will increament x.memb
+  bar(10); // x.memb = 1
+  bar(10); // x.memb = 2
+  // here x is refering to age..after a couple of bar() call age.memb = 2.this referecing will result in memory leak with html object
+}());
+//---------------------------------------------------------------
+
+/*
+	When Js function is invoked a new execution is created.Along with the parents and arguments, its also get variables declared outside the func.below an eg
+*/
+
+var a = 10;
+
+function test() {
+  console.log(a);
+  console.log(b); // closure get the value...also function hoisting is hapening here
+}
+var b = 10;
+test();
+//---------------------------------------------------------------------
+
+var plane = function(defaultAirport) {
+  var lastAirportLeft = defaultAirport;
+  console.log(lastAirportLeft);
+  var car = {
+    driver: {
+      startAccessPlaneInfo: function() {
+        setInterval(function() {
+          console.log("last airpoirt" + lastAirportLeft);
+        }, 2000);
+      }
+
+    }
+  };
+  car.driver.startAccessPlaneInfo();
+  return {
+    leaveTheAirport: function(airportName) {
+      lastAirportLeft = airportName;
+    }
+  }
+}("SF International Airport");
+
+plane.leaveTheAirport('John F kennedy');
+
+
+//----------------------------------------------------------------------
+/*
+Whenever you use function inside another function, a closure is used.
+Whenever you use eval() inside a function, a closure is used. The text you eval can reference local variables of the function, and within eval you can even create new local variables by using eval('var foo = …')
+When you use new Function(…) (the Function constructor) inside a function, it does not create a closure. (The new function cannot reference the local variables of the outer function.)
+A closure in JavaScript is like keeping a copy of all the local variables, just as they were when a function exited.
+It is probably best to think that a closure is always created just an entry to a function, and the local variables are added to that closure.
+A new set of local variables is kept every time a function with a closure is called (given that the function contains a function declaration inside it, and a reference to that inside function is either returned or an external reference is kept for it in some way).
+Two functions might look like they have the same source text, but have completely different behaviour because of their 'hidden' closure. I don't think JavaScript code can actually find out if a function reference has a closure or not.
+If you are trying to do any dynamic source code modifications (for example: myFunction = Function(myFunction.toString().replace(/Hello/,'Hola'));), it won't work if myFunction is a closure (of course, you would never even think of doing source code string substitution at runtime, but...).
+It is possible to get function declarations within function declarations within functions — and you can get closures at more than one level.
+I think normally a closure is the term for both the function along with the variables that are captured. Note that I do not use that definition in this article!
+I suspect that closures in JavaScript differ from those normally found in functional languages.
+*/
