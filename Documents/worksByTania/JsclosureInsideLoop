@@ -1,0 +1,54 @@
+//--to overcome function inside a loop issue Imediately invoked func----
+
+// we can use ES6 let to avoid func in a loop issue..bz let is block scoped
+(function() {
+  var func = [];
+  for (var i = 0; i < 10; i++) {
+    func[i] = (function(index) {
+      return function() {
+        console.log("my val" + index);
+      }
+    })(i);
+  }
+  for (var j = 0; j < 3; j++) {
+    func[j]();
+  }
+})();
+//-----------------------------------------------------------------------
+//--bind can be also used to overcome func in a loop issue----------
+
+(function() {
+  // defining a func outside the loop and then binding within loop gives good performance
+  function log(x) {
+    console.log('my val' + x);
+  }
+
+  var func = [];
+
+  for (var i = 0; i < 3; i++) {
+    func[i] = log.bind(this, i);
+  }
+
+  for (var j = 0; j < 3; j++) {
+    func[j]();
+  }
+})();
+
+//-------------------------------------------------------------------
+//for better optmization we should create a seperate inner func with its own enviroment
+(function() {
+  var funcs = {};
+
+  for (var i = 0; i < 3; i++) {
+    funcs[i] = wrapper(i)
+  }
+  for (var j = 0; j < 3; j++) {
+    funcs[j]();
+  }
+
+  function wrapper(ilocal) {
+    return function() {
+      console.log(ilocal);
+    }
+  }
+})();
