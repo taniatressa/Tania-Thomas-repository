@@ -1,0 +1,128 @@
+//block scoping using let and var
+
+/*
+Both let and const create variables that are block-scoped – they only exist within the innermost block that surrounds them.
+*/
+
+(function func1() {
+  if (true) {
+    let i = 10;
+    console.log(i)
+  }
+  //console.log(i) // refernce error but var wont cause this error
+})();
+
+// var created but let are mutable but using const is immutable
+
+const a = 10;
+//a=20; //type error
+console.log(a);
+
+//if const refers to an obj, it will always refer to the object but obj can be changed if its mutable
+
+const obj = {};
+obj.prop = "name";
+console.log(obj.prop);
+//obj = {}; // typeError
+
+//if we want obj to be truly const then we can freeze val
+const obj1 = Object.freeze();
+//obj1.prop = 12; // typeError
+
+/*
+			const in loop bodies
+Once a const variable has been created, it can’t be changed. But that doesn’t mean that you can’t re-enter its scope and start fresh, with a new value.
+*/
+
+function logArgs(...args) {
+  for (let [index, elem] of args.entries()) {
+    const message = index + '.' + elem
+    console.log(message);
+  }
+}
+
+logArgs('hello', 'from', 'tani');
+
+//let is used for mutable values....
+//const for immutable value though const const can refer to mutable variables
+//here both var and value are immutable
+const EMTY_ARRAY = Object.freeze([]);
+
+//--------------------------------------------------------------------
+/*
+Variables declared via let have temporal dead zones (TDZ). An exception is thrown before TDZ ends if var is got or set.see below eg
+*/
+(function() {
+  if (true) { // enter new scope Temporal Dead Zone (TDZ) starts
+    const func = function() {
+        console.log(myVal);
+      }
+      //func(); // refernce error
+      //console.log(typeof(myVal)); // reference error
+    let myVal = 10; //TDZ ends
+    func(); // called outside TDZ
+  }
+})();
+//-------------------------------------------------------------------
+
+//let gives fresh binding for each iteration 
+
+let arr = [];
+for (let i = 0; i < 3; i++) {
+  arr.push(() => i);
+}
+
+console.log(arr.map(x => x()));
+
+//-------------------------------------------------------------------
+
+//if  let-declare a variable that has the same name as a parameter, you get a static (load-time) error:
+
+function func2(arg) {
+  //let arg; //static error duplicate declaration...but in case var no error jus redeclaration happens
+  {
+    let arg; //this works...same in the block shodows the parameter
+  }
+}
+func2(2);
+//------------------------------------------------------------------
+//If parameters have default values [2], they are treated like a sequence of let statements and are subject to temporal dead zones:
+
+// OK: `y` accesses `x` after it has been declared
+function foo(x = 1, y = x) {
+  return [x, y];
+}
+console.log(foo()); // works [1,1]
+
+// Exception: `x` tries to access `y` within TDZ
+function bar(x = y, y = 2) {
+  return [x, y];
+}
+//bar(); // reference error
+
+//methods or functions defined “inside” parameter default values don’t see the local variables of the body
+
+let foo1 = "outer"
+
+function bar1(func = x => foo1) {
+  let foo1 = "inner";
+  console.log(func());
+}
+bar1();
+//--------------------------------------------------------------------------
+
+/*Class declarations…
+
+        are block-scoped.
+        don’t create properties on the global object.
+        are not hoisted
+*/
+{ // enter a new scope
+
+  const identity = x => x;
+  //TDZ of class starts
+  //let inst = new MyClass(); // reference error
+  class MyClass extends identity(Object) {
+
+  }
+}
