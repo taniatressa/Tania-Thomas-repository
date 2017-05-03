@@ -16,6 +16,10 @@ JavaScript implements prototype-based OO. In prototype-based OO, new objects are
 (instead of being instantiated from a class template) and methods live directly in objects instead of in classes. 
 Inheritance is done via delegation: if an object doesn't have a method or property, it is looked up on its prototype(s)
 (i.e. the object it was cloned from), then the prototype's prototypes and so on.
+
+Not only can you create objects by copying existing ones, you can also construct them "out of thin air" using constructors.
+If you call a function with the new keyword, that function becomes a constructor and the this keyword will not point to the
+current object but instead to a newly created "empty" one. So, you can configure an object any way you like
 */
 (function() {
 
@@ -46,3 +50,23 @@ Inheritance is done via delegation: if an object doesn't have a method or proper
   console.log(course1.get('name'));
   console.log(course1.set('grade', 'A+'));
 })();
+
+//------------------------------------------
+var Person = function(){
+var job = {}; // private var
+this.setJob = function(jobTitle,active){job[jobTitle] = active;}
+this.getJob = function(jobTitle) {return job[jobTitle]};
+}
+var Employee = function(){
+Person.apply(this); // this will uniqueness for each instance
+};
+
+Employee.prototype = new Person();
+
+var tan  = new Employee();
+tan.setJob('developer',true);
+console.log(tani.getJob('developer'))
+
+var tani = new Employee();
+console.log(tani.getJob('developer'));
+
