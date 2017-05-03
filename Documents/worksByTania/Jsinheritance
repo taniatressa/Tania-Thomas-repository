@@ -11,6 +11,12 @@
   console.log(course1.name);
 })();
 //---------------------------------prototypal inheritance------------------------
+/*
+JavaScript implements prototype-based OO. In prototype-based OO, new objects are created by copying other objects
+(instead of being instantiated from a class template) and methods live directly in objects instead of in classes. 
+Inheritance is done via delegation: if an object doesn't have a method or property, it is looked up on its prototype(s)
+(i.e. the object it was cloned from), then the prototype's prototypes and so on.
+*/
 (function() {
 
   var Course = function(name, total, grade) {
