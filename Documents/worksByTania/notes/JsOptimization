@@ -1,0 +1,75 @@
+1. when defining a class, try to define as
+          baz.Bar = function(){
+              //constructor body
+          }
+
+          baz.Bar.prototype.fo0 = function(){
+              //method body
+          }
+
+    the above approach, how many times instances of baz.Bar is constructed,only a single function is created for foo and no closures created
+
+2. Initializing instance variable, do as following
+
+        baz.Bar = function(){
+            this.prop1 = [];
+        }
+        baz.Bar.prototype.prop1 = 3;
+        baz.Bar.prototype.prop1 = "blah";
+        baz.Bar.prototype.prop1 = true;
+        
+  This avoids unnecessarily running the initialization code each time the constructor is called. 
+  
+  3.Closures are powerful but they have disadvantages as well.Most common is memory leaks.creating closure is slower than creating an inner
+  func without closure and much slower than reusing a static func.eg:
+  
+      function setupAlertTimeout() {
+        var msg = 'Message to alert';
+        window.setTimeout(function() { alert(msg); }, 100);
+      }
+      is slower than:
+
+      function setupAlertTimeout() {
+        window.setTimeout(function() {
+          var msg = 'Message to alert';
+          alert(msg);
+        }, 100);
+      }
+      which is slower than:
+
+      function alertMsg() {
+        var msg = 'Message to alert';
+        alert(msg);
+      }
+
+      function setupAlertTimeout() {
+        window.setTimeout(alertMsg, 100);
+      } 
+  4.closures add a level to scope chain.When the browser resolves properties, each level of the scope chain must be checked.
+      var a = "";
+      function func(){
+          var b = 10;
+          return function(){
+            var c = 9;
+            a;
+            b;
+            c;
+          }
+      }
+      var f = func();
+      f();
+      
+      when f is invoked, referencing a is slower than referencing b, which is slower than referencing c.
+      
+  5. Avoid using with in your code. It has a negative impact on performance,
+     as it modifies the scope chain, making it more expensive to look up variables in other scopes
+     
+ 6. Avoid browser leaks.most common memory leak in web application is circular reference btw dom and c++ object implementing DOM.
+    So use an EVENT SYSTEM for attaching event handlers.use event systems like jQuery,DOJO,google doctype
+    using inline event handlers cause an memory leak in IE.
+      
+      
+  
+  
+        
+          
