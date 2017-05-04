@@ -1,0 +1,45 @@
+function Animal(name) {
+  this.name = name; //instance var
+  Animal.count = Animal.count + 1 || 1; //static var
+}
+
+Animal.showCount = function() { //static method
+  console.log(Animal.count);
+}
+
+Animal.prototype.countAll = function() { //instance var
+  console.log(this.name)
+}
+
+var cat = new Animal("catty");
+cat.countAll();
+//cat.showCount(); //Error!! cat.showCount is not a function, which is different from  Java
+Animal.showCount();
+Animal.showCount();
+
+var mice = new Animal("micey");
+Animal.showCount();
+
+//---------------------------------------------
+ var Foo = function() {
+  //private var
+  var _bar;
+  //constructor
+  function Foo() {
+    this.getBar = function() {
+      return _bar;
+    };
+    this.setBar = function(bar) {
+      _bar = bar;
+    };
+  }
+  
+    return new Foo();
+
+};
+
+var f = new Foo();
+var g = new Foo();
+f.getBar()
+f.setBar(222);
+console.log(g.getBar()); //undefined 
