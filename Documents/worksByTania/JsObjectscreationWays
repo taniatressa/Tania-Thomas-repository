@@ -1,0 +1,75 @@
+//Object constructor
+var myObject = new Object();
+myObject.name = "tan";
+myObject.getNmae = function() {};
+
+//function constructor - provides possiblity of using prototypal inhritance
+
+function myObject(name, rollno, grade) {
+  this.name = name;
+  this.rollno = rollno;
+  this.grade = grade;
+}
+
+var obj1 = new myObject("tani", "32", "A");
+
+//literal constructor
+
+var myObject = {
+  name: name,
+  rollno: rollno,
+  grade: grade,
+  getGrade: function() {}
+};
+
+myObject.name = "my name is " + this.name;
+
+//create object property dynamically
+
+var myObectj = {};
+myObject.name = "tani";
+myObject["rollno"] = rollno;
+
+//prototype way
+function myObj() {}
+myObj.prototype.name = "name";
+
+//function prototype combo
+function muObj(name) {
+  this.name = "tha";
+}
+muObj.prototype.getName = function() {};
+
+//singleTon obj
+var myobj = new function() {
+    this.name = "myname";
+  }
+  //--------------------------------------------------
+var a = Object.create(null); // a-->null
+var b = Object.create(a); // b --> a --> Object.prototype --> null
+//---------------------------------
+// In es6 using class keyword
+'use strict'
+
+class Shape {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
+
+}
+
+class Square extends Shape {
+  constructor(height, width) {
+    super(height, width);
+  }
+  get area() {
+    return this.height * this.width;
+  }
+  set sideLength(newValue) {
+    this.height = newValue;
+    this.width = newValue;
+  }
+}
+
+var square = new Square()
