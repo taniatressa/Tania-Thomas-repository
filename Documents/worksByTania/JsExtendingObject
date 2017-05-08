@@ -1,0 +1,106 @@
+// this is not a good approach as there is a chance we can mess up with prototype
+/*
+var Person = function(name,type){
+this.name= name;
+this.type = "human";
+}
+Person.prototype.info = function(){
+console.log("name " + this.name + "type " + this.type)
+};
+var Robot = function(name){
+Person.apply(this,arguments);
+this.name = name;
+this.type = 'robot';
+}
+
+Robot.prototype = Person.prototype; //set prototype to person
+Robot.prototype.constructor = Robot; // set constructor back to Girl
+
+person = new Person("kevin",32);
+robot = new Robot("Robo",1);
+
+person.info();
+robot.info();
+*/
+//So better approach is to use Object.create
+
+var Person = {
+  name: '',
+  age: 32,
+  type: 'human',
+  greet: function() {
+    console.log("I am " + this.name + " of type " + this.type);
+  }
+}
+
+//instatance of person
+
+var skywalker = Object.create(Person);
+skywalker.name = "skywalker";
+skywalker.greet();
+
+//extending base prototype
+var Robot = Object.create(Person);
+Robot.type = 'robot';
+Robot.variant = ''; //add property
+//overriding greet func
+Robot.greet = function() {
+  console.log("I am robot " + this.name + " I speak differently of type " + this.type);
+
+};
+
+//create instance of robot
+var Robo1 = Object.create(Robot);
+Robo1.variant = "robo1";
+
+var Robo2 = Object.create(Robo1);
+Robo2.name = 'robo2';
+Robo2.greet();
+skywalker.greet();
+//-------------------------------------------------------------------
+// Now using Es6 Assign we can reduce the number of lines
+//Creating Robot using assign()
+
+var Robot = Object.create(Person);
+Object.assign(Robot,{
+	name : 'Robot',
+  madeOf: 'metal',
+  powerOnConsumption_kwh : 5,
+  fullChargeConsumption : 10,
+  currentCharge_kwh  : 5
+});
+
+//add methods
+Robot.charge = function(kwh){
+	var self = this;
+  this.currentCharge_kwh = Math.min(self.fullChargeConsumption + self.currentCharge_kwh + kwh);
+  var percentageCharged = (this.currentCharge_kwh / this.fullChargeConsumption) *100;
+  console.log(this.name);
+  console.log((percentageCharged === 100) ? 'is fullyCharged' : 'is ' + percentageCharged + '%');
+}
+
+Robot.charge(5);
+
+//-----------------------------------------------------------------------
+
+//if we need more control over values then can use Object.create 2nd argument
+//but its lengthy
+var Robot = Object.create(Person,{
+	madeOf{
+        value : 'metal',
+        writable: true,
+        configurable: true,
+        enumerable : true
+			},
+     powerConsumption{
+     value : 5,
+     writable: true,
+     configurable: true,
+     enumerable : true
+     }
+})
+
+
+//--------------------------------------------------
+
+
