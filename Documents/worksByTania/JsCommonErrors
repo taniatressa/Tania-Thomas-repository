@@ -20,3 +20,81 @@ return obj;
 }
 var obj3 = make_obj1("tania","tressa");
 console.log(obj3.firstName)
+
+function make_obj(firstName,lastName){
+this.firstName = firstName;
+this.lastName = lastName;
+}
+
+var obj1 = make_obj("tania","tressa"); //make_obj doesnt return anything
+//console.log(obj1.firstName); //typeError since there is now firstname refer to obj1.bcz we dint invoke with new keyword
+console.log(window.firstName);
+
+//the new object referenced by a constructor's this inherits properties from the constructor's prototype.
+var obj2 = new make_obj("tania","tressa");
+console.log(obj2.firstName);
+
+
+function make_obj1(firstName,lastName){
+var obj = {};
+obj.firstName = firstName;
+obj.lastName = lastName;
+return obj;
+}
+var obj3 = make_obj1("tania","tressa");
+console.log(obj3.firstName)
+
+
+function make_obj(firstName,lastName){
+this.firstName = firstName;
+this.lastName = lastName;
+}
+
+var obj1 = make_obj("tania","tressa"); //make_obj doesnt return anything
+//console.log(obj1.firstName); //typeError since there is now firstname refer to obj1.bcz we dint invoke with new keyword
+console.log(window.firstName);
+
+//the new object referenced by a constructor's this inherits properties from the constructor's prototype.
+var obj2 = new make_obj("tania","tressa");
+console.log(obj2.firstName);
+
+
+function make_obj1(firstName,lastName){
+var obj = {};
+obj.firstName = firstName;
+obj.lastName = lastName;
+return obj;
+}
+var obj3 = make_obj1("tania","tressa");
+console.log(obj3.firstName)
+//-----------------------------------------------------------------------
+function MyConstructor() {}
+MyConstructor.prototype = {};
+var myobject = new MyConstructor();
+
+console.log(myobject instanceof MyConstructor); //true
+console.log(myobject instanceof Object); //true
+console.log(myobject.constructor == MyConstructor) //false
+
+//----------------------------------------------------------------
+
+function MyConstructor() {}
+var myobject = new MyConstructor();
+MyConstructor.prototype = {};
+
+console.log(myobject instanceof MyConstructor);//false
+console.log(myobject instanceof Object);//true
+console.log(myobject.constructor == MyConstructor) //true
+
+//---------------------------------------------------------------
+
+function MyConstructor() {}
+var myobject = new MyConstructor();
+
+console.log(myobject instanceof MyConstructor);//true
+console.log(myobject instanceof Object); //true
+console.log(myobject.constructor == MyConstructor) //false
+
+//-------------------------------------------------------------
+
+
