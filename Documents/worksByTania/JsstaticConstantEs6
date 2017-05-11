@@ -1,0 +1,38 @@
+var Ns = {};
+const constant1 = 22,
+  constant2 = 33;
+
+Ns.Example = class Example {
+  static get constant1() {
+    return constant1;
+  }
+  static get constant2() {
+    return constant2
+  }
+}
+
+//we can retrieve it without parenthesis
+console.log(Ns.Example.constant1)
+
+// --- or ---
+//we can create a non writable property in class
+class Example1{
+
+}
+Object.defineProperty(Example1,'constant1',{
+value:22,
+writable : false,
+enumerable:true,
+configurable:true
+})
+
+console.log(Example1.constant1);
+Example1.constant1 = 55; //typeError
+
+//--or--
+//using Object.freeze()
+
+class MyConstants{}
+MyConstants.staticValue = 22;
+MyConstants.staticMethod = function(){return 22;
+Object.freeze(MyConstants)};
