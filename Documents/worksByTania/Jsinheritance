@@ -1,72 +1,140 @@
-//-----------------------classical inheritance---------------
-(function() {
-  function Course(name, total, grade) {
-    this.name = name;
-    this.total = total;
-    this.grade = grade;
-  }
+//Pseudo classical inheritance
 
-  var course1 = new Course("CS", 300, "A");
+// Define the Person constructor function
+function Person() {}
+Person.prototype.sayHello = function() {
+  console.log('hello');
+}
 
-  console.log(course1.name);
-})();
+// Define the Student constructor function
+function Student() {Person.call(this);}
+// Inherit from Person
+Student.prototype = new Person();
+//Student.prototype = Object.create(Person); --> its always good to use this
+
+// Correct the constructor pointer, because it points to Person
+Student.prototype.constructor = Student
+
+
+// Replace the sayHello method (a polymorphism example)
+Student.prototype.sayHello = function() {
+  console.log('Student');
+}
+
+var st = new Student();
+st.sayHello();
+
+
 //---------------------------------prototypal inheritance------------------------
-/*
-JavaScript implements prototype-based OO. In prototype-based OO, new objects are created by copying other objects
-(instead of being instantiated from a class template) and methods live directly in objects instead of in classes. 
-Inheritance is done via delegation: if an object doesn't have a method or property, it is looked up on its prototype(s)
-(i.e. the object it was cloned from), then the prototype's prototypes and so on.
+//Best way
+// Helper function
+if (typeof Object.create !== 'function') {
+  Object.create = function(o) {
+    function F() {}
+    F.prototype = o;
+    return new F();
+  };
+}
 
-Not only can you create objects by copying existing ones, you can also construct them "out of thin air" using constructors.
-If you call a function with the new keyword, that function becomes a constructor and the this keyword will not point to the
-current object but instead to a newly created "empty" one. So, you can configure an object any way you like
-*/
-(function() {
+var person = {
+    sayHello : function () {
+        alert('Person object');
+    },
+    walk : function () {
+        alert('walk');
+    }
+};
 
-  var Course = function(name, total, grade) {
-    // private
-    var private = {
-      name: name,
-      grade: grade,
-      total: total
-    };
+var student1 = Object.create(person);
+student1.sayHello = function () {
+    alert('hello I am a student');
+};
 
-    //expose API
-    return {
-      get: function(prop) {
-        if (private.hasOwnProperty(prop)) {
-          return private[prop];
-        }
-      },
-      set: function(prop, value) {
-        if (private.hasOwnProperty(prop)) {
-          private[prop] = value;
-          return private[prop];
+
+
+  /*
+  JavaScript implements prototype-based OO. In prototype-based OO, new objects are created by copying other objects
+  (instead of being instantiated from a class template) and methods live directly in objects instead of in classes. 
+  Inheritance is done via delegation: if an object doesn't have a method or property, it is looked up on its prototype(s)
+  (i.e. the object it was cloned from), then the prototype's prototypes and so on.
+
+  Not only can you create objects by copying existing ones, you can also construct them "out of thin air" using constructors.
+  If you call a function with the new keyword, that function becomes a constructor and the this keyword will not point to the
+  current object but instead to a newly created "empty" one. So, you can configure an object any way you like
+  */
+  (function() {
+
+    var Course = function(name, total, grade) {
+      // private
+      var private = {
+        name: name,
+        grade: grade,
+        total: total
+      };
+
+      //expose API
+      return {
+        get: function(prop) {
+          if (private.hasOwnProperty(prop)) {
+            return private[prop];
+          }
+        },
+        set: function(prop, value) {
+          if (private.hasOwnProperty(prop)) {
+            private[prop] = value;
+            return private[prop];
+          }
         }
       }
-    }
-  };
-  var course1 = new Course('maths', 320, 'A');
-  console.log(course1.get('name'));
-  console.log(course1.set('grade', 'A+'));
-})();
+    };
+    var course1 = new Course('maths', 320, 'A');
+    console.log(course1.get('name'));
+    console.log(course1.set('grade', 'A+'));
+  })();
 
 //------------------------------------------
-var Person = function(){
-var job = {}; // private var
-this.setJob = function(jobTitle,active){job[jobTitle] = active;}
-this.getJob = function(jobTitle) {return job[jobTitle]};
+var Person = function() {
+  var job = {}; // private var
+  this.setJob = function(jobTitle, active) {
+    job[jobTitle] = active;
+  }
+  this.getJob = function(jobTitle) {
+    return job[jobTitle]
+  };
 }
-var Employee = function(){
-Person.apply(this); // this will uniqueness for each instance
+var Employee = function() {
+  Person.apply(this); // this will uniqueness for each instance
 };
 
 Employee.prototype = new Person();
 
-var tan  = new Employee();
-tan.setJob('developer',true);
-console.log(tani.getJob('developer'))
+var tan = new Employee();
+tan.setJob('developer', true);
+//console.log(tani.getJob('developer'))
 
 var tani = new Employee();
-console.log(tani.getJob('developer'));
+//console.log(tani.getJob('developer'));
 
+//---------------------------------------------------
+//closure way
+function Person1(name,age){
+var that = {};
+that.name = name;
+that.age = age;
+that.toString = function(){
+return that.name +' '+ that.age;
+};
+return that;
+}
+
+function Student1(name,age,school){
+var that = Person1(name,age);
+that.school = "mySchool";
+var baseString = that.toString;
+that.toString = function(){
+return baseString(that)+ ' school ' + 'that.school';
+};
+return that;
+}
+var st1 = Student1('tan','27','UCSC');
+console.log(st1.toString())
