@@ -1,0 +1,23 @@
+function BaseClass(name){
+this.name = name;
+}
+
+BaseClass.prototype.foo = function(arg){
+return arg;
+}
+
+function SubClass(name){
+BaseClass.call(this,name);
+}
+
+SubClass.prototype = Object.create(BaseClass.prototype);
+SubClass.prototype.constructor = SubClass;
+
+SubClass.prototype.sub = function(){
+return "subClass";
+}
+
+SubClass.prototype.foo = function(arg){
+//call base class fo on current instance
+BaseClass.prototype.foo.call(this,arg) + " sub";
+}
