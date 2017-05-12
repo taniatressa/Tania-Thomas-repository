@@ -1,0 +1,65 @@
+//special nature of arrays
+
+/*
+Array objects treat “numeric” properties in a special way. Whenever such property changes, value of array’s “length” property is adjusted as well; it’s adjusted in such was as to make sure that it is always one more than the greatest numeric (own) property of an array. Similarly, when “length” property is changed, numeric properties are adjusted accordingly 
+*/
+
+//1.When array object is created, its “length” property is set to a value one more than the largest index of an array.
+
+var arr = ['x','y','z'];
+console.log(arr.length);//3
+
+arr = ['foo'];
+console.log(arr.length); //1
+
+//2. When numeric properties change, so does “length” change — to maintain the relationship of being 1 greater than the largest index
+
+arr = ['x','y'];
+console.log(arr.length);//2
+
+arr[2] = 'z';
+console.log(arr.length);//3
+
+//3.When “length” property changes, numeric properties are adjusted in such way so that greatest index is 1 smaller than value of “length”.
+
+var arr = ['x','y','z'];
+console.log(arr.length);//3
+arr.length = 2;
+console.log(arr);//['x','y'] last ele deleted
+
+arr.length = 4;
+console.log(arr);//increasin length doesnt affect numeric properties
+
+arr.join(); 
+console.log(arr)//"x,y,," ...but has consequences visible in other cases, such as when using `Array.prototype.join`
+
+arr.push('z');
+console.log(arr); //[x,y,undefined,undefined,'z']
+
+//4 array’s “length” property MUST always have a value of non-negative integer less than 2^32. Whenever this condition is violated, a RangeError is thrown
+
+var arr = [];
+//arr.length = Math.pow(2,32);//range error
+console.log(arr.length);//0
+arr.length = Math.pow(2,32) - 1; //set to max val
+console.log(arr.length);
+//arr.length++ // rangeError
+//arr.push(1);//rangeEroor
+
+//when we extend an array say subArray,it creates an object that inherit from Array.prototype but lacks these above mentioned special behaviour.So the subArray will be just like a plain object
+//5 Array.prototype.join also uses length property to determine when to stop concatenating .
+
+var arr = ['x','y'];
+arr.length = 6;
+console.log(arr.join());//x,y,,, 
+
+//6.Same goes for Array.prototype.concat — method used to produce a new array by concatenating values passed to concat:
+var arr = ['x'];
+arr.length =3;
+console.log(arr.concat('y')); //'x',undefined,'y'
+
+//7.the special behavior is often cleverly exploited in other situations, such as to “clear” an array
+
+var arr = ['s','d'];
+arr.length=0;
+console.log(arr.length)
