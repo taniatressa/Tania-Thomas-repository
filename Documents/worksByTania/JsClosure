@@ -232,3 +232,14 @@ It is possible to get function declarations within function declarations within 
 I think normally a closure is the term for both the function along with the variables that are captured. Note that I do not use that definition in this article!
 I suspect that closures in JavaScript differ from those normally found in functional languages.
 */
+
+//a good eg of closure
+
+function Add(a) {
+  return function(b) {
+    return a + b;
+  }
+}
+
+var add = Add(3);
+console.log(add(4));
