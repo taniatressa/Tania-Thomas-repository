@@ -86,12 +86,12 @@ $(document).ready(function() {
 
 (function() {
   function removeDuplicates_fast(a) {
-    var seen = {};
-    var out = [];
-    var len = a.length;
-    var j = 0;
+    var seen = {},
+        out = [],
+       len = a.length,
+       j = 0,item;
     for (var i = 0; i < len; i++) {
-      var item = a[i];
+       item = a[i];
       if (seen[item] !== 1) {
         seen[item] = 1;
         out[j++] = item;
