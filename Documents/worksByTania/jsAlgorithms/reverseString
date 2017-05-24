@@ -1,0 +1,71 @@
+// reverse string
+
+//concatenation done well in modern browsers but slow in IE8
+
+function revString(str) {
+  var strLength = str.length - 1,
+    revStr = '',
+    i;
+  for (i = strLength; i >= 0; i--) {
+    revStr += str[i];
+
+  }
+  return revStr;
+}
+
+console.log(revString("my name"));
+
+//-----using array but complexity is o(n)----
+function revString1(str) {
+  if (!str || typeof str != 'string' || str.length < 2) return str;
+
+  var revArr = [],
+    i, strLength = str.length - 1;
+  for (i = strLength; i >= 0; i--) {
+		revArr.push(str[i]);
+  }
+  return revArr.join('');
+}
+
+console.log(revString1("my name"));
+
+//----reducing complexity travesing till half------
+
+function revString2(str) {
+  if (!str || typeof str != 'string' || str.length < 2) return str;
+ str = str.split('');
+  var revstr = '',
+    i, len = str.length,halfLength = Math.floor(str.length/2)-1
+  for (i = 0; i <= halfLength; i++) {
+		revStr = str[len-i-1];
+    str[len-i-1] = str[i];
+    str[i] = revStr;
+  }
+  return str.join('');
+}
+
+console.log(revString2("my name"));
+
+//---using resursion-----
+
+function reverseString3(str) {
+  if (str === "") {
+    return "";
+  } else {
+    console.log(str.charAt(0))
+    return reverseString3(str.substr(1)) + str.charAt(0);
+  }
+
+}
+//---built in method--
+function reverseString4(str) {
+  if (!str || typeof str !== 'string' || str.length < 2) {
+    return str;
+
+  }
+  
+return str.split('').reverse().join('');
+}
+
+console.log(reverseString3("my name"));
+console.log(reverseString4("my name"));
