@@ -69,3 +69,10 @@ return str.split('').reverse().join('');
 
 console.log(reverseString3("my name"));
 console.log(reverseString4("my name"));
+
+//-------------reverse words but keep the numbers---------------
+function reverseWordsKeepNumbers(str) {
+  return str.split(/([^\d\.])/).reverse('').join('');
+}
+console.log(reverseWordsKeepNumbers('my nam34.89e is .45'));
+
