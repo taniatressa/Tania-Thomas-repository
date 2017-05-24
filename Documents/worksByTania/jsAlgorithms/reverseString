@@ -76,3 +76,28 @@ function reverseWordsKeepNumbers(str) {
 }
 console.log(reverseWordsKeepNumbers('my nam34.89e is .45'));
 
+//incrementing and decrementing using 2 for loops
+function revereString5(str) {
+  var o = [],
+    strLength = str.length - 1,
+    j, i;
+
+  for (i = strLength, j = 0; i >= 0; i--, j++) {
+    o[j] = str[i]
+  }
+  return o.join('');
+}
+console.log(revereString5("my name"));
+
+//incrementing for loop with array pushing
+function reverseString6(str) {
+  var strLength = str.length,
+    i, o = [];
+  for (i = 0; i < strLength; i--) {
+    o.push(str.charAt(strLength - i));
+  }
+  return o.join('');
+}
+console.log(reverseString6("my name"));
+
+
