@@ -1,0 +1,29 @@
+//loading an image when ajax req is sent
+//if no Ajx req is not in progress then ajaxStart triggers.this triggers globally
+//if we dont want to get trigged for some ajax call can set global= false
+$(document).ajaxStart(function(){
+$('#loadingImage').show();
+})
+
+$(document).ajaxStop(function(){
+$('#loadingImage').hide();
+})
+
+//-Or-
+//to avoid triggering ajax start and ajax stop set global = false
+function ajaxCall(data, url) {
+  $('#loadingImage').show();
+  type: 'POST',
+    url: url,
+    cache: false,
+    data: 'data = ' + data,
+    global:false,
+    success: function(html) {
+      $('.content').html(html);
+    }
+  complete: function() {
+    $('#loadingImage').hide();
+  }
+
+
+}
