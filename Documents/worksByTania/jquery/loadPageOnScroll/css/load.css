@@ -1,0 +1,31 @@
+body {
+  margin: 0;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+h1 {
+  text-align: center;
+}
+
+#posts {
+  margin: 0 auto;
+  padding: 0;
+  width: 500px;
+  list-style-type: none;
+}
+
+article h1 {
+  text-align: left;
+  border-bottom: 2px dotted #CCCCCC;
+}
+
+article p {
+  text-align: justify;
+  line-height: 1.5;
+  font-size: 1.2em;
+}
+
+#loading {
+  display: none;
+  text-align: center;
+}
