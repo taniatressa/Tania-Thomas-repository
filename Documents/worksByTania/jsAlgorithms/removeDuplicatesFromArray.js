@@ -133,3 +133,28 @@ var uniqueArray1 = names.slice() //slice makes copy of array before sorting
   }, []); //this empty array becomes the starting value of a
 
 console.log(uniqueArray1);
+
+//to find duplicate values in array
+//using hash takes lots of memory,in that case we sort and check for consecutive values in array.Complexity will be less than 0(n2)
+
+arr = arr.slice().sort();
+result = [];
+for(var i=0;i<arr.length;i++){
+  if(arr[i] === arr[i+1]{
+      result.push(arr[i])
+     }
+}
+
+//if its memory is not a issue then use map
+function(arr){
+  obj = {};
+  out = [];
+  for(var i=0;i<arr.length;a++){
+    obj[arr[i]] = 0;
+  for(j in obj){
+    out.push(j)
+  return out;
+  }
+    
+  }
+}
